@@ -9,7 +9,7 @@ import cn.hutool.qq.message.Message;
 public class QQClientTest {
 	public static void main(String[] args) {
 		@SuppressWarnings("resource")
-		QQClient client  = new QQClient();
+		QQClient client = new QQClient();
 		client.loopPollMessage(new MessageListener() {
 			
 			@Override

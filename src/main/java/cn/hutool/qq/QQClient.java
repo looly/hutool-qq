@@ -1,6 +1,5 @@
 package cn.hutool.qq;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +36,7 @@ import cn.hutool.qq.util.QQHttpUtil;
  * @author looly
  *
  */
-public class QQClient implements Closeable{
+public class QQClient {
 	private static Log log = LogFactory.get();
 
 	private QQConfig config;
@@ -71,6 +70,9 @@ public class QQClient implements Closeable{
 	 */
 	public QQClient createSession(QQConfig config) {
 		this.session = new QQSession(config);
+		//获取用户信息，此步骤必须有，否则获取消息失败
+		final UserInfo userinfo = getAccountInfo();
+		log.info("欢迎：{}", userinfo.getNick());
 		return this;
 	}
 
@@ -286,10 +288,23 @@ public class QQClient implements Closeable{
 			@Override
 			public void run() {
 				while(messageReciveOn) {
-					pollMessage(listener);
+					safePollMessage(listener);
 				}
 			}
 		}.start();
+	}
+	
+	/**
+	 * 拉取消息，此方法为一次性拉取消息，所有异常都不抛出，而是打印日志
+	 *
+	 * @param listener 消息监听
+	 */
+	public void safePollMessage(MessageListener listener) {
+		try {
+			pollMessage(listener);
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
 	/**
@@ -306,11 +321,22 @@ public class QQClient implements Closeable{
 				.put("psessionid", session.psessionid)//
 				.put("key", "");
 
-		HttpResponse response = QQHttpUtil.get(ApiEnum.POLL_MESSAGE, r);
+		HttpResponse response = QQHttpUtil.post(r, ApiEnum.POLL_MESSAGE);
+		log.debug(response.body());
 		JSONArray array = QQHttpUtil.getArrayResult(response);
-		for (JSONObject item : array.jsonIter()) {
-			listener.onRecived(MessageFactory.createMessage(item.getStr("poll_type"), item.getJSONObject("value")));
+		if(null != array) {
+			for (JSONObject item : array.jsonIter()) {
+				listener.onRecived(MessageFactory.createMessage(item.getStr("poll_type"), item.getJSONObject("value")));
+			}
 		}
+	}
+	
+	/**
+	 * 停止消息拉取
+	 * @throws IOException
+	 */
+	public void stopPollMessage() throws IOException {
+		messageReciveOn = false;
 	}
 
 	/**
@@ -425,9 +451,4 @@ public class QQClient implements Closeable{
 		}
 	}
 	// --------------------------------------------------------------------------------------------------------------------- Private method end
-
-	@Override
-	public void close() throws IOException {
-		messageReciveOn = false;
-	}
 }

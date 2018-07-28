@@ -32,13 +32,13 @@ public class FriendMessage implements Message{
 	 * @param userIdFieldName 用户ID对应的字段名，用于适配不同类型消息
 	 */
 	protected FriendMessage(JSONObject json, String userIdFieldName) {
-		JSONArray cont = json.getJSONArray("content");
-		this.font = cont.getJSONArray(0).getBean(1, Font.class);
+		JSONArray contentArray = json.getJSONArray("content");
+		this.font = contentArray.getJSONArray(0).getBean(1, Font.class);
 
-		final int size = cont.size();
+		final int size = contentArray.size();
 		final StringBuilder contentBuilder = new StringBuilder();
 		for (int i = 1; i < size; i++) {
-			contentBuilder.append(cont.getStr(i));
+			contentBuilder.append(contentArray.getStr(i));
 		}
 		this.content = contentBuilder.toString();
 
