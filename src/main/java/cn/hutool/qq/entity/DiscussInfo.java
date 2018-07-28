@@ -14,7 +14,7 @@ public class DiscussInfo extends Discuss{
 
 	/**
 	 * 增加用户
-	 * @param user
+	 * @param user 讨论组用户
 	 */
 	public void addUser(DiscussUser user) {
 		this.users.add(user);

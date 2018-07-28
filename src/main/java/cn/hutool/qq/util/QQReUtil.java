@@ -17,7 +17,7 @@ public class QQReUtil {
 	 * 获取ptwebqq的URL
 	 * 
 	 * @param verifyQrCodeResponse 验证QQ二维码的接口返回值
-	 * @return
+	 * @return URL
 	 */
 	public static String getPtwebqqUrl(String verifyQrCodeResponse) {
 		return ReUtil.get(VERIFY_QRCODE_RESP_PATTERN, verifyQrCodeResponse, 3);

@@ -1,6 +1,5 @@
 package cn.hutool.qq;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -25,6 +24,7 @@ import cn.hutool.qq.entity.GroupUser;
 import cn.hutool.qq.entity.UserInfo;
 import cn.hutool.qq.entity.base.Font;
 import cn.hutool.qq.listener.MessageListener;
+import cn.hutool.qq.message.Message;
 import cn.hutool.qq.message.MessageFactory;
 import cn.hutool.qq.message.MessageIdPool;
 import cn.hutool.qq.message.MessageType;
@@ -42,6 +42,7 @@ public class QQClient {
 	private QQConfig config;
 	private QQSession session;
 	private volatile boolean messageReciveOn;
+	private UserInfo userinfo;
 
 	/**
 	 * 构造，使用默认配置项
@@ -71,7 +72,7 @@ public class QQClient {
 	public QQClient createSession(QQConfig config) {
 		this.session = new QQSession(config);
 		//获取用户信息，此步骤必须有，否则获取消息失败
-		final UserInfo userinfo = getAccountInfo();
+		this.userinfo = getAccountInfo();
 		log.info("欢迎：{}", userinfo.getNick());
 		return this;
 	}
@@ -160,7 +161,7 @@ public class QQClient {
 	/**
 	 * 获得好友的详细信息
 	 *
-	 * @param 好友ID
+	 * @param friendId 好友ID
 	 * @return 好友信息（用户信息）
 	 */
 	public UserInfo getFriendInfo(long friendId) {
@@ -175,7 +176,7 @@ public class QQClient {
 	 * 获得qq号
 	 *
 	 * @param friendId 用户id
-	 * @return
+	 * @return QQ号码
 	 */
 	public long getQQById(long friendId) {
 		log.debug("开始获取QQ号……");
@@ -247,7 +248,7 @@ public class QQClient {
 	 * 获得讨论组的详细信息
 	 *
 	 * @param discussId 讨论组id
-	 * @return
+	 * @return 讨论组的详细信息
 	 */
 	public DiscussInfo getDiscussInfo(long discussId) {
 		log.debug("开始获取讨论组资料");
@@ -322,20 +323,23 @@ public class QQClient {
 				.put("key", "");
 
 		HttpResponse response = QQHttpUtil.post(r, ApiEnum.POLL_MESSAGE);
-		log.debug(response.body());
 		JSONArray array = QQHttpUtil.getArrayResult(response);
 		if(null != array) {
+			Message message;
 			for (JSONObject item : array.jsonIter()) {
-				listener.onRecived(MessageFactory.createMessage(item.getStr("poll_type"), item.getJSONObject("value")));
+				message = MessageFactory.createMessage(item.getStr("poll_type"), item.getJSONObject("value"));
+				if(Long.parseLong(this.userinfo.getUin()) != message.getUserId()) {
+					//不处理自己发的消息
+					listener.onRecived(message);
+				}
 			}
 		}
 	}
 	
 	/**
 	 * 停止消息拉取
-	 * @throws IOException
 	 */
-	public void stopPollMessage() throws IOException {
+	public void stopPollMessage() {
 		messageReciveOn = false;
 	}
 

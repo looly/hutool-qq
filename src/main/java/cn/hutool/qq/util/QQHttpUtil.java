@@ -38,7 +38,7 @@ public class QQHttpUtil {
 	 */
 	public static HttpResponse retryGet(int retryCount, ApiEnum url, Object... urlParams) {
 		HttpResponse response = get(url, urlParams);
-		while ((response.getStatus() < 400) && (--retryCount > 0)) {
+		while ((response.getStatus() >= 400) && (--retryCount > 0)) {
 			response.close();
 			response = get(url, urlParams);
 		}
@@ -73,7 +73,7 @@ public class QQHttpUtil {
 	 */
 	public static HttpResponse retryPost(int retryCount, JSONObject arguments, ApiEnum url, Object... urlParams) {
 		HttpResponse response = post(arguments, url, urlParams);
-		while ((response.getStatus() < 400) && (--retryCount > 0)) {
+		while ((response.getStatus() >= 400) && (--retryCount > 0)) {
 			response.close();
 			response = post(arguments, url, urlParams);
 		}
