@@ -13,6 +13,40 @@
 
 -------------------------------------------------------------------------------
 
+## 运行
+
+```java
+final QQClient client = new QQClient();
+client.loopPollMessage(new SplitMessageListener() {
+	
+	@Override
+	public void onGroupMessage(GroupMessage message) {
+		//接收群消息
+		String content = message.getContent();
+		Console.log("[{}][{}] {}", message.getUserId(), DateUtil.date(message.getTime()).toTimeStr(), message.getContent());
+	}
+	
+	@Override
+	public void onFriendMessage(FriendMessage message) {
+		//接收好友消息
+		Console.log("[{}][{}] {}", message.getUserId(), DateUtil.date(message.getTime()).toTimeStr(), message.getContent());
+		
+	}
+	
+	@Override
+	public void onDiscussMessage(DiscussMessage message) {
+		//接收讨论组消息
+		Console.log("[{}][{}] {}", message.getUserId(), DateUtil.date(message.getTime()).toTimeStr(), message.getContent());
+	}
+});
+```
+
+运行后提示：
+
+二维码保存于：[XXX\hutool-qq\target\test-classes\qrcode.png]，请打开手机QQ扫描登录。
+
+打开地址对应的图片，使用手机QQ扫描即可。
+
 ## 感谢
 
 WebQQ API全部来自[Smart QQ Java](https://github.com/ScienJus/smartqq)项目，部分逻辑思想有参考。
