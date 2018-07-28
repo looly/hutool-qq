@@ -1,5 +1,7 @@
 package cn.hutool.qq;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -35,11 +37,12 @@ import cn.hutool.qq.util.QQHttpUtil;
  * @author looly
  *
  */
-public class QQClient {
+public class QQClient implements Closeable{
 	private static Log log = LogFactory.get();
 
 	private QQConfig config;
 	private QQSession session;
+	private volatile boolean messageReciveOn;
 
 	/**
 	 * 构造，使用默认配置项
@@ -58,7 +61,17 @@ public class QQClient {
 			config = new QQConfig();
 		}
 		this.config = config;
+		createSession(config);
+	}
+	
+	/**
+	 * 新建QQ登录会话，用于登录其它账号或重新登录
+	 * @param config 登录配置
+	 * @return this
+	 */
+	public QQClient createSession(QQConfig config) {
 		this.session = new QQSession(config);
+		return this;
 	}
 
 	/**
@@ -259,6 +272,25 @@ public class QQClient {
 		}
 		return discussInfo;
 	}
+	
+	/**
+	 * 新建线程循环读取消息接收接口，用于消息
+	 * @param listener 消息监听
+	 */
+	public void loopPollMessage(final MessageListener listener) {
+		if(this.messageReciveOn) {
+			throw new QQException("消息接收线程已启动！");
+		}
+		this.messageReciveOn = true;
+		new Thread() {
+			@Override
+			public void run() {
+				while(messageReciveOn) {
+					pollMessage(listener);
+				}
+			}
+		}.start();
+	}
 
 	/**
 	 * 拉取消息，此方法为一次性拉取消息
@@ -393,4 +425,9 @@ public class QQClient {
 		}
 	}
 	// --------------------------------------------------------------------------------------------------------------------- Private method end
+
+	@Override
+	public void close() throws IOException {
+		messageReciveOn = false;
+	}
 }
