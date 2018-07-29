@@ -1,3 +1,27 @@
+<p align="center">
+	<a href="http://hutool.cn/"><img src="http://www.hutool.cn/images/logo.jpg" width="400"></a>
+</p>
+<p align="center">
+	<strong>A set of tools that keep Java sweet.</strong>
+</p>
+<p align="center">
+	<a href="http://search.maven.org/#artifactdetails%7Ccn.hutool%7Chutool-all%7C4.1.5%7Cjar">
+		<img src="https://img.shields.io/badge/version-1.0.0-blue.svg" >
+	</a>
+	<a href="http://www.apache.org/licenses/LICENSE-2.0.html">
+		<img src="http://img.shields.io/:license-apache-blue.svg" >
+	</a>
+	<a>
+		<img src="https://img.shields.io/badge/JDK-1.7+-green.svg" >
+	</a>
+</p>
+<p align="center">
+	Gitee主页：<a href="https://gitee.com/loolly/hutool-qq">https://gitee.com/loolly/hutool-qq</a><br/>
+	QQ群：<a href="https://jq.qq.com/?_wv=1027&k=5Yxay3A">384355290</a>
+</p>
+
+-------------------------------------------------------------------------------
+
 ## 简介
 
 基于Hutool和WebQQ-API实现的QQ API封装，功能包括：
