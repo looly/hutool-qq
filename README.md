@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="http://hutool.cn/"><img src="https://gitee.com/loolly/hutool-qq/raw/master/doc/hutool-qq.jpg" width="400"></a>
+	<a href="http://hutool.cn/"><img src="https://gitee.com/loolly/hutool-qq/raw/master/doc/hutool-qq.jpg" width="100"></a>
 </p>
 <p align="center">
 	<strong>A QQ java sdk power by Hutool</strong>
