@@ -1,8 +1,8 @@
 <p align="center">
-	<a href="http://hutool.cn/"><img src="http://www.hutool.cn/images/logo.jpg" width="400"></a>
+	<a href="http://hutool.cn/"><img src="https://gitee.com/loolly/hutool-qq/raw/master/doc/hutool-qq.jpg" width="400"></a>
 </p>
 <p align="center">
-	<strong>A set of tools that keep Java sweet.</strong>
+	<strong>A QQ java sdk power by Hutool</strong>
 </p>
 <p align="center">
 	<a href="http://search.maven.org/#artifactdetails%7Ccn.hutool%7Chutool-all%7C4.1.5%7Cjar">
