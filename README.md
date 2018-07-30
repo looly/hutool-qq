@@ -63,6 +63,15 @@ client.loopPollMessage(new SplitMessageListener() {
 		Console.log("[{}][{}] {}", message.getUserId(), DateUtil.date(message.getTime()).toTimeStr(), message.getContent());
 	}
 });
+
+//获取分组以及分组下的好友列表
+Collection<Category> friendsByCategory = client.getFriendsByCategory();
+for (Category category : friendsByCategory) {
+	Console.log(category);
+	for (Friend friend : category.getFriends()) {
+		Console.log("-- {}", friend.getNickname());
+	}
+}
 ```
 
 运行后提示：
