@@ -28,7 +28,11 @@ public class QQClientTest {
 			@Override
 			public void onFriendMessage(FriendMessage message) {
 				Console.log("[{}][{}] {}", message.getUserId(), DateUtil.date(message.getTime()).toTimeStr(), message.getContent());
-				
+				long id = message.getUserId();
+				String answer = QADict.INSTANCE.getAnswerLike(message.getContent());
+				if(null != answer) {
+					client.sendMessage(MessageType.FRIEND, id, answer);
+				}
 			}
 			
 			@Override

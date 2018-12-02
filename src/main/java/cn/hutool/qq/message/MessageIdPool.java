@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public enum MessageIdPool {
 	INSTANCE;
 	
-	private AtomicLong id = new AtomicLong(43690001);
+	private AtomicLong id = new AtomicLong(32150001);
 	
 	/**
 	 * 获取下一个消息ID

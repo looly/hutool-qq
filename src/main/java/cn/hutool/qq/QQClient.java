@@ -323,6 +323,7 @@ public class QQClient {
 				.put("key", "");
 
 		HttpResponse response = QQHttpUtil.post(r, ApiEnum.POLL_MESSAGE);
+		log.debug("消息响应内容: {}", response.body());
 		JSONArray array = QQHttpUtil.getArrayResult(response);
 		if(null != array) {
 			Message message;
@@ -361,7 +362,7 @@ public class QQClient {
 		JSONObject r = JSONUtil.createObj()//
 				// 附带字体的消息内容，以JSON字符串表示
 				.put("content", JSONUtil.toJsonStr(Arrays.asList(msg, Arrays.asList("font", Font.DEFAULT_FONT))))//
-				.put("face", 573)//
+				.put("face", 585)//
 				.put("clientid", config.getClientId())//
 				.put("msg_id", MessageIdPool.INSTANCE.getNext())//
 				.put("psessionid", session.psessionid);
